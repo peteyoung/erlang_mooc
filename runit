@@ -1,0 +1,4 @@
+#!/bin/sh
+
+#docker run -it --rm -v ${PWD}/src:/root/src peteyoung/erlmooc /bin/ash
+docker-compose run --rm erlmooc

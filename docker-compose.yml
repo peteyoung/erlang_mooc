@@ -1,0 +1,5 @@
+erlmooc:
+  image: peteyoung/erlmooc
+  command: /bin/ash
+  volumes:
+    - ./src:/root/src
