@@ -1,5 +1,5 @@
 -module(week1).
--export([area/1, perimeter/1, enclose/1, sumBitDR/1, sumBitDR/2]).
+-export([area/1, perimeter/1, enclose/1, sumBitDR/1]).
 
 area({circle, R}) ->
     math:pi()*R*R;
@@ -46,15 +46,18 @@ enclose({triangle, A, B, C}) ->
 %% week1:enclose({triangle, 3, 4, 5}) == {rectangle,4,3.0}.
 
 
-sumBitDR(M, N) when M < N ->
-    %trunc((N band M) / M) + sumBitDR(M*2, N);
-    R = trunc((N band M) / M),
-    io:fwrite("N = ~p, M = ~p, R = ~p~n", [N,M,R]), 
-    R + sumBitDR(M*2, N);
-sumBitDR(M, N) ->
-    io:fwrite("N = ~p, M = ~p, R = 0~n", [N,M]), 
+sumBitDR(M, N) when M =< N ->
+    trunc((N band M) / M) + sumBitDR(M*2, N);
+sumBitDR(_M, _N) ->
     0.
 
 sumBitDR(N) ->
     sumBitDR(1, N).
 
+%% week1:sumBitDR(127) == 7.
+%% week1:sumBitDR(128) == 1.
+%% week1:sumBitDR(255) == 8.
+%% week1:sumBitDR(256) == 1.
+%% week1:sumBitDR(254) == 7.
+%% week1:sumBitDR(173) == 5.
+%% week1:sumBitDR(85) == 4.
