@@ -1,5 +1,5 @@
 -module(week1).
--export([area/1, perimeter/1, enclose/1, sumBitDR/1]).
+-export([area/1, perimeter/1, enclose/1, sumBitDR/1, sumBitTR/1]).
 
 area({circle, R}) ->
     math:pi()*R*R;
@@ -61,3 +61,20 @@ sumBitDR(N) ->
 %% week1:sumBitDR(254) == 7.
 %% week1:sumBitDR(173) == 5.
 %% week1:sumBitDR(85) == 4.
+
+
+sumBitTR(M, N, A) when M =< N ->
+    sumBitTR(M*2, N, A + trunc((N band M) / M));
+sumBitTR(_M, _N, A) ->
+    A.
+
+sumBitTR(N) ->
+    sumBitTR(1, N, 0).
+
+%% week1:sumBitTR(127) == 7.
+%% week1:sumBitTR(128) == 1.
+%% week1:sumBitTR(255) == 8.
+%% week1:sumBitTR(256) == 1.
+%% week1:sumBitTR(254) == 7.
+%% week1:sumBitTR(173) == 5.
+%% week1:sumBitTR(85) == 4.
