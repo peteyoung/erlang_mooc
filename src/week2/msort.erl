@@ -1,15 +1,15 @@
--module(sort).
--export([msort/1, count/1, split/1, merge/2]).
+-module(msort).
+-export([sort/1, count/1, split/1, merge/2]).
 
-msort([]) ->
+sort([]) ->
     [];
-msort([X]) ->
+sort([X]) ->
     [X];
-msort([X|Xs]) ->
+sort([X|Xs]) ->
     {L, R} = split([X|Xs]),
-    merge(msort(L), msort(R)).
+    merge(sort(L), sort(R)).
 
-%% sort:msort([5,2,8,4,3,9,6,1,7,0]) == [0,1,2,3,4,5,6,7,8,9].
+%% msort:sort([5,2,8,4,3,9,6,1,7,0]) == [0,1,2,3,4,5,6,7,8,9].
 
 
 merge([], []) ->
@@ -24,11 +24,11 @@ merge([HL|Ls], [HR|Rs]) ->
 	false -> [HR|merge([HL|Ls], Rs)]
     end.
 
-%% sort:merge([1], [2]) == [1,2].
-%% sort:merge([1,2], []) == [1,2].
-%% sort:merge([], [1,2]) == [1,2].
-%% sort:merge([3], [1,2]) == [1,2,3].
-%% sort:merge([3,4], [1,2]) == [1,2,3,4].
+%% msort:merge([1], [2]) == [1,2].
+%% msort:merge([1,2], []) == [1,2].
+%% msort:merge([], [1,2]) == [1,2].
+%% msort:merge([3], [1,2]) == [1,2,3].
+%% msort:merge([3,4], [1,2]) == [1,2,3,4].
 
 
 count(Xs) ->
@@ -38,10 +38,10 @@ count([], A) ->
 count([_|Xs], A) ->
     count(Xs, A+1).
 
-%% sort:count([1, 2, 3, 4, 5, 6]) == 6.
-%% sort:count([]) == 0.
-%% sort:count("hello") == 5.
-%% sort:count("abcdefghijklmnopqrstuvwxyz") == 26.
+%% msort:count([1, 2, 3, 4, 5, 6]) == 6.
+%% msort:count([]) == 0.
+%% msort:count("hello") == 5.
+%% msort:count("abcdefghijklmnopqrstuvwxyz") == 26.
 
 
 split(Xs) ->
@@ -57,5 +57,5 @@ split([X|Xs], L, R, M, false) ->
     %% io:fwrite("in true   X:~w, Xs:~w, L:~w, R:~w, M:~w, cL:~w, b:~w~n", [X, Xs, L, R, M, count(L), count(L)<M]),
     %% io:fwrite("in false  X:~w, Xs:~w, L:~w, R:~w, M:~w, cL:~w, b:~w~n", [X, Xs, L, R, M, count(L), count(L)<M]),
 
-%% sort:split([1, 2 ,3 ,4 ,5 ,6]).
-%% sort:split([1, 2 ,3]).
+%% msort:split([1, 2 ,3 ,4 ,5 ,6]).
+%% msort:split([1, 2 ,3]).
