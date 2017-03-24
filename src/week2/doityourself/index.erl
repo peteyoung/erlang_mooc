@@ -46,12 +46,12 @@ index(Name) ->
 %    WordsByLine.
 [].
 
-parse(Line) -> parse(Line, []).
+parse(Lines) -> parse(Lines, [], 1).
 
-parse([], Words) -> 
+parse([], Words, _LineNum) -> 
     lists:reverse(Words);
-parse([Line|Lines], Words) ->
-    parse(Lines, [extract_words(Line)|Words]).
+parse([Line|Lines], Words, LineNum) ->
+    parse(Lines, [{LineNum, extract_words(Line)}|Words], LineNum+1).
 %% index:parse(index:get_file_contents("gettysburg-address.txt")).
 
 
