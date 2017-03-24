@@ -1,6 +1,7 @@
 -module(index).
 -export([get_file_contents/1,show_file_contents/1,
-        index/1, extract_word/1]).
+        index/1, extract_word/1, extract_words/1,
+	parse/1]).
 
 % Used to read a file into a list of lines.
 % Example files available in:
@@ -45,29 +46,34 @@ index(Name) ->
 %    WordsByLine.
 [].
 
-%parse(L) -> parse(L, []).
-%
-%parse([], Words) -> Words;
-%parse([Line|Lines], Words) ->
-%    {Remainder, Word} = extract_word(Remainder),
-%    parse(Remainder, [Word|Words]).
+parse(Line) -> parse(Line, []).
+
+parse([], Words) -> 
+    lists:reverse(Words);
+parse([Line|Lines], Words) ->
+    parse(Lines, [extract_words(Line)|Words]).
+%% index:parse(index:get_file_contents("gettysburg-address.txt")).
+
+
+extract_words(Line) -> extract_words(Line, []).
+
+extract_words([], Words) ->
+    lists:reverse(Words);
+extract_words(Line, Words) ->
+    {Remainder, Word} = extract_word(Line),
+    extract_words(Remainder, [Word|Words]).
 
 
 extract_word(Line) -> extract_word(Line, []).
 
-extract_word([], Word) ->
-%    io:fwrite("extract_word [] W: ~w~n)", [Word]),
-    {[], lists:reverse(Word)}; %% EOL
-extract_word([H|T], Word) when H == 32 ->
-%    io:fwrite("extract_word " ", T: ~w, W: ~w~n)", [T,Word]),
-    {T, lists:reverse(Word)}; %% Space
+extract_word([], Word) -> %% EOL
+    {[], lists:reverse(Word)};
+extract_word([H|T], Word) when H == 32 -> %% Space
+    {T, lists:reverse(Word)};
 extract_word([H|T], Word) when H >= 65, H =< 90 -> %% A-Z
-%    io:fwrite("extract_word A-Z H: ~w, T: ~w, W: ~w~n)", [H,T,Word]),
     extract_word(T, [H+32|Word]); %% conv. to lower case
 extract_word([H|T], Word) when H >= 97, H =< 122 -> %% a-z
-%    io:fwrite("extract_word a-z H: ~w, T: ~w, W: ~w~n)", [H,T,Word]),
     extract_word(T, [H|Word]);
 extract_word([_|T], Word) -> %% ignore other chars
-%    io:fwrite("extract_word XXX H: ~w, T: ~w, W: ~w~n)", [H,T,Word]),
     extract_word(T, Word).
 
