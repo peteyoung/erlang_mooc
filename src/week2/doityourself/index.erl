@@ -41,10 +41,29 @@ show_file_contents([]) ->
 
 
 index(Name) ->
-%    Lines = get_file_contents(Name),
-%    WordsByLine = parse(Lines),
-%    WordsByLine.
-[].
+    Lines = get_file_contents(Name),
+    WordsByLine = parse(Lines),
+    map_lines_to_words(WordsByLine).
+%% index:index("gettysburg-address.txt").
+%% D = index:index("gettysburg-address.txt").
+
+
+map_lines_to_words(WordsByLine) ->
+    map_lines_to_words(WordsByLine, dict:new()).
+
+map_lines_to_words([], Dict) ->
+    Dict;
+map_lines_to_words([H|T], Dict) ->
+    {LineNum, Words} = H,
+    map_lines_to_words(T, add_line_to_words(LineNum, Words, Dict)).
+
+
+add_line_to_words(_, [], Dict) ->
+    Dict;
+add_line_to_words(LineNum, [H|T], Dict) ->
+    %io:fwrite("append H:~s, #:~w, D:~w~n", [H, LineNum, Dict]).
+    add_line_to_words(LineNum, T, dict:append(H, LineNum, Dict)).
+
 
 parse(Lines) -> parse(Lines, [], 1).
 
