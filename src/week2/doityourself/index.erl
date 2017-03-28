@@ -57,7 +57,7 @@ format_index(LinesByWord) ->
 format_index([], _LinesByWord, Index) ->
     Index;
 format_index([Word|More], LinesByWord, Index) ->
-    LNums = dict:fetch(Word),
+    LNums = dict:fetch(Word, LinesByWord),
     format_index(More, LinesByWord, [format_index_line(Word, LNums)|Index]).
 
 
@@ -80,6 +80,7 @@ build_tuples([Start|More]) ->
 %% index:build_tuples([1,2,3,4]) == [{1,4}].
 %% index:build_tuples([1,2,3,4,6,7,8,10]) == [{1,4},{6,8},{10,10}].
 %% index:build_tuples([3,4,5,7,11,12,13]) == [{3,5},{7,7},{11,13}].
+%% index:build_tuples([1]) == [{1,1}].
 
 
 %% iterate list of numbers and return start and end of any series
