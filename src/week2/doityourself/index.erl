@@ -1,3 +1,4 @@
+%% https://hastebin.com/birajucino.pl
 -module(index).
 -export([get_file_contents/1,show_file_contents/1,
         index/1, extract_word/1, extract_words/1,
