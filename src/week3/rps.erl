@@ -1,5 +1,5 @@
 -module(rps).
--export([beat/1, lose/1, result/2, tournament/2, test/0]).
+-export([beat/1, lose/1, result/2, tournament/2]).
 
 beat(rock) -> paper;
 beat(paper) -> scissors;
@@ -25,19 +25,4 @@ tournament(L, R) ->
     lists:foldr(fun (X, Acc) -> Acc + X end,
                 0,
 		results(L, R)).
-
-test() ->
-    1 = result(rock, paper),
-    1 = result(paper, scissors),
-    1 = result(scissors, rock),
-    0 = result(rock, rock),
-    0 = result(paper, paper),
-    0 = result(scissors, scissors),
-    -1 = result(rock, scissors),
-    -1 = result(paper, rock),
-    -1 = result(scissors, paper),
-
-    -1 = tournament([rock,rock,paper,paper],[rock,paper,scissors,rock],
-
-    ok.
 
