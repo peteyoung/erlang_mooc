@@ -1,4 +1,4 @@
--module(rps_test).
+-module(rps_tests).
 -include_lib("eunit/include/eunit.hrl").
 
 result_test() ->
