@@ -11,9 +11,9 @@ lose(scissors) -> paper.
 
 result(L, R) -> 
     case L == lose(R) of
-        true  -> 1;
+        true  -> -1;
         false -> case L == beat(R) of
-            true  -> -1;
+            true  -> 1;
             false -> 0
         end
     end.
