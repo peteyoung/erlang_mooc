@@ -1,5 +1,8 @@
 -module(rps).
--export([play/1,echo/1,play_two/3,rock/1,no_repeat/1,const/1,enum/1,cycle/1,rand/1,val/1,tournament/2]).
+-export([play/1,echo/1,play_two/3,rock/1,no_repeat/1,const/1,
+         enum/1,cycle/1,rand/1,val/1,tournament/2,
+         count/1, frequencies/1, frequency/2, least_freq/1,
+         most_freq/1, rand_strategy/1]).
 
 
 %
@@ -104,6 +107,27 @@ beats(paper) ->
 beats(scissors) ->
     paper.
 
+% give the play which the argument loses to.
+
+loses(rock) ->
+    paper;
+loses(paper) ->
+    scissors;
+loses(scissors) ->
+    rock.
+
+count(Xs) -> 
+    lists:foldr(fun (_, Acc) ->  Acc+1 end, 0, Xs).
+
+frequencies(Xs) -> 
+    R = frequency(rock, Xs),
+    P = frequency(paper, Xs),
+    S = frequency(scissors, Xs),
+    [{rock, R}, {paper, P}, {scissors, S}].
+
+frequency(RPS, Xs) -> 
+    count(lists:filter(fun(X) -> X == RPS end, Xs)).
+
 %
 % strategies.
 %
@@ -116,20 +140,41 @@ rock(_) ->
     rock.
 
 
-
 % FOR YOU TO DEFINE
 % REPLACE THE dummy DEFINITIONS
 
 no_repeat([]) ->
-    dummy;
+    rock;
 no_repeat([X|_]) ->
-    dummy.
+    loses(X).
 
 const(Play) ->
     dummy.
 
-cycle(Xs) ->
-    dummy.
+cycle(Xs) -> 
+    enum(count(Xs) rem 3).
 
 rand(_) ->
-    dummy.
+    enum(random:uniform(3)-1).
+
+least_freq(Xs) ->
+    by_freq(fun lists:min/1, Xs).
+
+most_freq(Xs) ->
+    by_freq(fun lists:max/1, Xs).
+
+by_freq(Filter, Xs) ->
+    Freqs = frequencies(Xs),
+    Bound = Filter(lists:map(fun({_,F}) -> F end, Freqs)),
+    [{Play,_}|_] = lists:filter(fun({_,X}) -> X == Bound end, Freqs),
+    Play.
+
+%combine_strategies(S1, S2) -> fun(Xs) -> S2([S1(Xs)]).
+%combine_strategies(Fs) ->
+%    lists:foldr(fun combine_strategies/2, fun echo/1, Fs).
+
+% http://learnyousomeerlang.com/types-or-lack-thereof
+rand_strategy(Ss) when is_list(Ss) ->
+    lists:nth(random:uniform(count(Ss)), Ss).
+
+
