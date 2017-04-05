@@ -52,13 +52,19 @@ server(Pid) ->
         {check, P} ->
             case palindrome(P) of
                 true  ->
-                    Pid ! {result, io:format("~s is a palindrome", [P])};
+                    Pid ! {result, P ++ " is a palindrome", [P]};
                 false ->
-                    Pid ! {result, io:format("~s is not a palindrome", [P])}
-            end;
-	      Msg ->
+                    Pid ! {result, P ++ " is not a palindrome", [P]}
+            end,
+            server(Pid);
+        Msg ->
             io:format("stopping on ~s~n", [Msg])
     end.
-
+%% Pid = spawn(palin, server, [self()]).
+%% Pid ! {check, "boob"}.
+%% Pid ! {check, "cat"}.
+%% Pid ! {check, "A man, a plan, a canal, Panama."}.
+%% flush().
+%% Pid ! stop.
 
 
