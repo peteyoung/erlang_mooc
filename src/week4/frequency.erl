@@ -46,3 +46,19 @@ allocate({[Freq|Free], Allocated}, Pid) ->
 deallocate({Free, Allocated}, Freq) ->
   NewAllocated=lists:keydelete(Freq, 1, Allocated),
   {[Freq|Free],  NewAllocated}.
+
+
+%% c(frequency).
+%% Freq = spawn(frequency, init, []).
+%% Freq ! {request, self(), allocate}.
+%% receive {reply, Msg} -> Msg end.
+%% f(Msg).
+%% Freq ! {request, self(), {deallocate, 10}}.
+%% receive {reply, Msg} -> Msg end.
+%% f(Msg).
+%% Freq ! {request, self(), allocate}.
+%% receive {reply, Msg} -> Msg end.
+%% f(Msg).
+%% Freq ! stop.
+%% f(Freq).
+
