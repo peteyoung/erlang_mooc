@@ -14,10 +14,8 @@
 
 init() ->
   Frequencies = {get_frequencies(), []},
-%  register(?MODULE, spawn(?MODULE, loop, [Frequencies])),
-%  ?MODULE.
-  register(frequency, spawn(frequency, loop, [Frequencies])),
-  frequency.
+  register(?MODULE, spawn(?MODULE, loop, [Frequencies])),
+  ?MODULE.
 
 % Hard Coded
 get_frequencies() -> [10,11,12,13,14,15].
