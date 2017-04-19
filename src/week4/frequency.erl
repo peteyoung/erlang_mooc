@@ -7,14 +7,17 @@
 %%   (c) Francesco Cesarini and Simon Thompson
 
 -module(frequency).
--export([init/0]).
+-export([init/0, loop/1, get_frequencies/0]).
 
 %% These are the start functions used to create and
 %% initialize the server.
 
 init() ->
   Frequencies = {get_frequencies(), []},
-  loop(Frequencies).
+%  register(?MODULE, spawn(?MODULE, loop, [Frequencies])),
+%  ?MODULE.
+  register(frequency, spawn(frequency, loop, [Frequencies])),
+  frequency.
 
 % Hard Coded
 get_frequencies() -> [10,11,12,13,14,15].
@@ -47,18 +50,6 @@ deallocate({Free, Allocated}, Freq) ->
   NewAllocated=lists:keydelete(Freq, 1, Allocated),
   {[Freq|Free],  NewAllocated}.
 
-
-%% c(frequency).
-%% Freq = spawn(frequency, init, []).
-%% Freq ! {request, self(), allocate}.
-%% receive {reply, Msg} -> Msg end.
-%% f(Msg).
-%% Freq ! {request, self(), {deallocate, 10}}.
-%% receive {reply, Msg} -> Msg end.
-%% f(Msg).
-%% Freq ! {request, self(), allocate}.
-%% receive {reply, Msg} -> Msg end.
-%% f(Msg).
-%% Freq ! stop.
-%% f(Freq).
+%% S = frequency:init().
+%% frequency ! {request, self(), stop}.
 
