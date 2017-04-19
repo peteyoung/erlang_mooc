@@ -47,7 +47,3 @@ allocate({[Freq|Free], Allocated}, Pid) ->
 deallocate({Free, Allocated}, Freq) ->
   NewAllocated=lists:keydelete(Freq, 1, Allocated),
   {[Freq|Free],  NewAllocated}.
-
-%% S = frequency:init().
-%% frequency ! {request, self(), stop}.
-
