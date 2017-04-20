@@ -42,7 +42,12 @@ loop(Frequencies) ->
 allocate({[], Allocated}, _Pid) ->
   {{[], Allocated}, {error, no_frequency}};
 allocate({[Freq|Free], Allocated}, Pid) ->
-  {{Free, [{Freq, Pid}|Allocated]}, {ok, Freq}}.
+  case lists:keymember(Pid, 2, Allocated) of
+    true -> 
+      {{[Freq|Free], Allocated}, {error, pid_allocated_freq}};
+    false ->
+      {{Free, [{Freq, Pid}|Allocated]}, {ok, Freq}}
+  end.
 
 deallocate({Free, Allocated}, Freq) ->
   NewAllocated=lists:keydelete(Freq, 1, Allocated),
