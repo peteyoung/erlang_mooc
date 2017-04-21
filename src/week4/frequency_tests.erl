@@ -9,11 +9,19 @@ allocate_series_test_() ->
         fun assert_allocate/1
     }.
 
+allocate_one_per_pid_test_() ->
+    {setup,
+        fun setup_server/0,
+        fun teardown_server/1,
+        fun assert_one_per_pid/1
+    }.
+
 setup_server() -> 
     frequency:init().
     
 teardown_server(Server) ->
-    Server ! {request, self(), stop}.
+    Server ! {request, self(), stop},
+    timer:sleep(20).
 
 assert_allocate(Server) -> 
     [
@@ -24,6 +32,12 @@ assert_allocate(Server) ->
         ?_assertEqual(14, allocate_with_new_pid(Server)),
         ?_assertEqual(15, allocate_with_new_pid(Server)),
         ?_assertEqual(no_frequency, allocate_with_new_pid(Server))
+    ].
+
+assert_one_per_pid(Server) -> 
+    [
+        ?_assertEqual(10, allocate(Server)),
+        ?_assertEqual(pid_allocated_freq, allocate(Server))
     ].
 
 allocate_with_new_pid(Server) ->
