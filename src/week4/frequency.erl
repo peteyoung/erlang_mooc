@@ -29,7 +29,7 @@ loop(Frequencies) ->
       Pid ! {reply, Reply},
       loop(NewFrequencies);
     {request, Pid , {deallocate, Freq}} ->
-      NewFrequencies = deallocate(Frequencies, Freq),
+      NewFrequencies = deallocate(Frequencies, Pid, Freq),
       Pid ! {reply, ok},
       loop(NewFrequencies);
     {request, Pid, stop} ->
@@ -49,6 +49,6 @@ allocate({[Freq|Free], Allocated}, Pid) ->
       {{Free, [{Freq, Pid}|Allocated]}, {ok, Freq}}
   end.
 
-deallocate({Free, Allocated}, Freq) ->
-  NewAllocated=lists:keydelete(Freq, 1, Allocated),
-  {[Freq|Free],  NewAllocated}.
+deallocate({Free, Allocated}, Pid, Freq) ->
+  NewAllocated=lists:delete({Freq, Pid}, Allocated),
+  {[Freq|Free], NewAllocated}.
